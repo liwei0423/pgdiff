@@ -43,7 +43,7 @@ public class FileUtils {
 
                 if (arguments.parse(writer, args)) {
                     @SuppressWarnings("UseOfSystemOutOrSystemErr") final PrintWriter encodedWriter = new PrintWriter(
-                            new FileWriter(outDir + File.separator + fileName, true));
+                            new FileWriter(outDir + File.separator + fileName, false));
                     PgDiff.createDiff(encodedWriter, arguments);
                     encodedWriter.close();
                 }
@@ -58,4 +58,31 @@ public class FileUtils {
         }
     }
 
+    public static void removeLine(String outDir) {
+        List<File> fileList = FileUtil.loopFiles(outDir);
+        boolean flag = false;
+        for (File file : fileList) {
+            File tempFile = FileUtil.createTempFile();
+            List<String> lines = FileUtil.readUtf8Lines(file);
+            for(String line :lines){
+                if(flag){
+                    if(line.endsWith(";")){
+                        flag = false;
+                        continue;
+                    }
+                }
+                if(line.startsWith("DROP TABLE")||line.startsWith("DROP EXTENSION")||line.startsWith("DROP SEQUENCE")||line.startsWith("DROP FUNCTION")){
+                    if(!line.endsWith(";")){
+                        //过滤标记
+                        flag = true;
+                    }
+                    continue;
+                }else{
+                    FileUtil.appendUtf8String(line+"\r\n",tempFile);
+                }
+            }
+            FileUtil.copy(tempFile,file,true);
+            FileUtil.del(tempFile);
+        }
+    }
 }

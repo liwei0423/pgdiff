@@ -1,5 +1,6 @@
 package com.wshoto.pgdiff;
 
+import cn.hutool.core.io.FileUtil;
 import com.wshoto.pgdiff.util.FileUtils;
 
 import java.io.FileNotFoundException;
@@ -21,8 +22,9 @@ public class Main {
             String srcDir = args[0];
             String destDir = args[1];
             String outDir = args[2];
-//            FileUtils.copyNoExistFile(srcDir, destDir, outDir);
+            FileUtils.copyNoExistFile(srcDir, destDir, outDir);
             FileUtils.apgdiff(srcDir, destDir, outDir);
+            FileUtils.removeLine(outDir);
         }
     }
 }
