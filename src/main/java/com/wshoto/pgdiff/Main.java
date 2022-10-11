@@ -1,11 +1,8 @@
 package com.wshoto.pgdiff;
 
-import cn.hutool.core.io.FileUtil;
 import com.wshoto.pgdiff.util.FileUtils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * @description:
